@@ -6,11 +6,12 @@
  * Return: result
  */
 
-void print_int(int num) {
+void print_int(int num)
+{
 	int store = num, temp = num, count = 0, i;
 	char *buffer;
 
-	if (num < 0) 
+	if (num < 0)
 	{
 		putchar('-');
 		num *= -1;
@@ -20,7 +21,7 @@ void print_int(int num) {
 		temp /= 10;
 		count++;
 	}
-	buffer = (char*) malloc((count + 1) * sizeof(char));
+	buffer = (char *) malloc((count + 1) * sizeof(char));
 	i = count - 1;
 	if (num == 0)
 	{
@@ -35,7 +36,7 @@ void print_int(int num) {
 	if (store != 0)
 	{
 		i = 0;
-		while (i < count) 
+		while (i < count)
 		{
 			putchar(buffer[i++]);
 		}

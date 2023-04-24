@@ -1,92 +1,125 @@
-#include "main.h"
 #include <stdarg.h>
+#include <unistd.h>
+#include <stdio.h>
 
-/**
- * _printf - handling specifiers and printing chars
- * @format: format type
- * Return: result
- */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
 
+int handle_string(char *str)
+{
+	int i = 0;
+
+	if (str == NULL)
+	{
+		handle_string("(null)");
+		return (6);
+	}
+	while (str[i])
+	{
+		putchar(str[i]);
+		i++;
+	}
+	return (i);
+}
+
+int len_num(int num)
+{
+	if (num == 0)
+		return (0);
+	return (1 + len_num(num / 10));
+}
+
+int handle_number(int num)
+{
+	if (num == -2147483648)
+	{
+		_putchar('-');
+		_putchar('2');
+		handle_number(147483648);
+		return (1);
+	}
+	else if (num < 0)
+	{
+		_putchar('-');
+		num = -num;
+	}
+	if (num >= 10)
+	{
+		handle_number(num / 10);
+		handle_number(num % 10);
+	}
+	else if (num < 10)
+	{
+		_putchar(num + '0');
+	}
+	return (1);
+}
+// printf("pjczoc %s ", "alx")
 int _printf(const char *format, ...)
 {
-	va_list fm;
-	char *sval;
-	const char *ptr;
-	void *pval;
-	char *spval;
-	unsigned int bval;
-	int cval;
-	int hexaval;
-	unsigned int ival;
-	unsigned int uval;
-	double dval;
-	long oval;
-	va_start(fm,format);
-	for(ptr = format; *ptr; ptr++)
+	int count = 0;
+
+	va_list args;
+	va_start(args, format);
+
+	if (!format || !format[0])
+		return (-1);
+	while (*format)
 	{
-		if (*ptr != '%')
+		if (*format == '%')
 		{
-			putchar(*ptr);
-			continue;
-		}
-		if (*++ptr == '.')
-		{
-			// %.2d;
-		} else {
-			switch (*++ptr)
+			format++;
+			if (*format == 'c') 
 			{
+				char c = va_arg(args, int);
+				count += _putchar(c);
 
-				case 'i' :
-				case 'd' :
-					ival = va_arg(fm, unsigned int);
-					print_int(ival);
-					break;
-				case 'f' :
-					dval = va_arg(fm, double);
-					print_double(dval);
-					break;
-				case 's' :
-					for (sval = va_arg(fm, char *); *sval; sval++)
-						putchar(*sval);
-					break;
-				case 'u' :
-					uval = va_arg(fm, unsigned int);
-					print_unsint(uval);
-					break;
-				case 'o' :
-					oval = va_arg(fm, long);
-					print_octal(oval);
-					break;
-				case 'x':
-					hexaval = va_arg(fm, int);
-					print_hexaLOWER(hexaval);
-					break;
-				case 'X':
-					hexaval = va_arg(fm, int);
-					print_hexaUPPER(hexaval);
-					break;
-				case 'c' :
-					cval = va_arg(fm, int);
-					print_char(cval);
-					break;
-				case 'p' :
-					pval = va_arg(fm, void *);
-
-					print_adress((void*) pval);
-					break;
-				case 'b' :
-					bval = va_arg(fm, unsigned int);
-					print_binary(bval);
-					break;
-				default :
-					putchar('%');
-					putchar(*ptr);
-					break;
 			}
+			else if (*format == 's')
+			{
+				char *str = va_arg(args, char *);
+				count += handle_string(str);
+			}
+			else if (*format == '%')
+			{
+				_putchar('%');
+				count++;
+			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(args, int);
+				if (num < 0)
+					count++;
+				count += len_num(num);
+				handle_number(num);
+			}
+			else 
+			{
+				_putchar('%');
+				count++;
+				if (*format)
+				{
+					_putchar(*format);   
+					count++;
+				}
+			}
+			format++;
 		}
-
+		else
+		{
+			_putchar(*format);
+			format++;
+			count++;
+		}
 	}
+	return (count);
+}
 
-	va_end(fm);
-	return *format;
+int main()
+{
+	_printf("hello %d %i", 423, 12);
+
+	return (0);
 }
