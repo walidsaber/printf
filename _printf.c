@@ -27,6 +27,7 @@ int _printf(const char *format, ...)
 			case 'i':
 			case 'd':
 				print_int(va_arg(n_list, int));
+				count++;
 				break;
 			case 's':
 				count += print_str(va_arg(n_list, char *));
@@ -39,6 +40,7 @@ int _printf(const char *format, ...)
 				putchar('%');
 				if ((*ptr) != '%')
 					putchar(*ptr);
+				count++;
 				break;
 		}
 	}
