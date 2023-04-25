@@ -2,41 +2,52 @@
 #include <stdio.h>
 
 /**
+ * print_maxi - max int
+ * @max: value
+ * Return: void
+ */
+
+void print_maxi(int max)
+{
+	int num, digits[20], i, j;
+
+	putchar('-');
+	num = max;
+	i = 0;
+
+	while (num > 0)
+	{
+		digits[i++] = num % 10;
+		num /= 10;
+	}
+	for (j = i - 1; j >= 0; j--)
+	{
+		if (j == 0)
+			putchar('8');
+		else
+			putchar(digits[j] + '0');
+	}
+}
+/**
  * print_int - print int
  * @num: number
  * Return: result
  */
 void print_int(int num)
 {
-	int store, temp, count, j, i, digits[20];
+	int store, temp, count, i;
 	char *buffer;
 
+	if (num == INT_MIN)
+	{
+		print_maxi(INT_MAX);
+		return;
+	}
 	store = num;
 	if (num < 0)
 	{
 		putchar('-');
-		if (num == INT_MIN)
-		{
-			num = INT_MAX;
-			store = num;
-			i = 0;
-
-			while (num > 0)
-			{
-				digits[i++] = num % 10;
-				num /= 10;
-			}
-			for (j = i - 1; j >= 0; j--)
-			{
-				if (j == 0)
-					putchar('8');
-				else
-					putchar(digits[j] + '0');
-			}
-			return;
-		}
-		else
-			num *= -1;
+		num *= -1;
 	}
 	temp = num;
 	count = 0;
