@@ -3,7 +3,7 @@
 /**
  * get_flag - flag
  * @s: char
- * *f: struct
+ * @f: struct
  * Return: i
  */
 int get_flag(char s, sign_t *f)

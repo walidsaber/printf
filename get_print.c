@@ -2,6 +2,7 @@
 
 /**
  * get_print - print f
+ * @s: char
  * Return: arr
  */
 int (*get_print(char s))(va_list, sign_t *)
