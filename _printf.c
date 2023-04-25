@@ -6,7 +6,6 @@
  * @...: args
  * Return: count
  */
-
 int _printf(const char *format, ...)
 {
 	const char *ptr;
@@ -37,7 +36,9 @@ int _printf(const char *format, ...)
 				count++;
 				break;
 			default:
-				putchar(*ptr);
+				putchar('%');
+				if ((*ptr) != '%')
+					putchar(*ptr);
 				break;
 		}
 	}
