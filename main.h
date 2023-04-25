@@ -6,5 +6,6 @@
 
 int _printf(const char *format, ...);
 int print_str(char *str);
+void print_int(int num);
 
 #endif
