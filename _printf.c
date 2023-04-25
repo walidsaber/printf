@@ -1,58 +1,47 @@
 #include "main.h"
 
 /**
- * _printf - Printf replica
- * @format: format.
- * Return: Printed chars.
+ * _printf - printf replica
+ * @format: format type
+ * @...: args
+ * Return: count
  */
-
 int _printf(const char *format, ...)
 {
-	int i, print = 0, print_c = 0, fl, wid, prec, sz, buffer2 = 0;
-	va_list list;
-	char buffer[BUFF_SIZE];
+	int (*funcpoint)(va_list, sign_t *);
+	const char *p;
 
-	if (format == NULL)
+	register int count = 0;
+
+	va_list args;
+
+	sign_t flags = {0, 0, 0};
+
+	va_start(args, format);
+	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
-	va_start(list, format);
-	for (i = 0; format && format[i] != '\0'; i++)
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (p = format; *p; p++)
 	{
-		if (format[i] != '%')
+		if (*p == '%')
 		{
-			buffer[buffer2++] = format[i];
-			if (buffer2 == BUFF_SIZE)
-				print_buffer(buffer, &buffer2);
-			print_c++;
-		}
-		else
-		{
-			print_buffer(buffer, &buffer2);
-			fl = get_flags(format, &i);
-			wid = get_width(format, &i, list);
-			prec = get_precision(format, &i, list);
-			sz = get_size(format, &i);
-			++i;
-			print = handle_print(format, &i, list, buffer,
-					fl, wid, prec, sz);
-			if (print == -1)
-				return (-1);
-			print_c += print;
-		}
+			p++;
+			if (*p == '%')
+			{
+				count += _putchar('%');
+				continue;
+			}
+			while (get_flag(*p, &flags))
+				p++;
+			funcpoint = get_print(*p);
+			count += (funcpoint)
+				? funcpoint(args, &flags)
+				: _printf("%%%c", *p);
+		} else
+			count += _putchar(*p);
 	}
-	print_buffer(buffer, &buffer2);
-	va_end(list);
-	return (print_c);
-}
-
-/**
- * print_buffer - prints out the buffer
- * @buffer: arr
- * @buffer2: add
- */
-
-void print_buffer(char buff[], int *buffer2)
-{
-	if (*buffer2 > 0)
-		write(1, &buff[0], *buffer2);
-	*buffer2 = 0;
+	_putchar(-1);
+	va_end(args);
+	return (count);
 }
