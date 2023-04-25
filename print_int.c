@@ -6,23 +6,47 @@
  * @num: number
  * Return: result
  */
-
 void print_int(int num)
 {
-	int store = num, temp = num, count = 0, i;
+	int store, temp, count, j, i, digits[20];
 	char *buffer;
 
+	store = num;
 	if (num < 0)
 	{
 		putchar('-');
-		num *= -1;
+		if (num == INT_MIN)
+		{
+			num = INT_MAX;
+			store = num;
+			i = 0;
+
+			while (num > 0)
+			{
+				digits[i++] = num % 10;
+				num /= 10;
+			}
+			for (j = i - 1; j >= 0; j--)
+			{
+				if (j == 0)
+					putchar('8');
+				else
+					putchar(digits[j] + '0');
+			}
+			return;
+		}
+		else
+			num *= -1;
 	}
+	temp = num;
+	count = 0;
 	while (temp != 0)
 	{
 		temp /= 10;
 		count++;
 	}
 	buffer = (char *) malloc((count + 1) * sizeof(char));
+
 	i = count - 1;
 	if (num == 0)
 	{
@@ -38,9 +62,7 @@ void print_int(int num)
 	{
 		i = 0;
 		while (i < count)
-		{
 			putchar(buffer[i++]);
-		}
 	}
 	free(buffer);
 }
