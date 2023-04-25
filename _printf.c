@@ -9,13 +9,12 @@
 
 int _printf(const char *format, ...)
 {
-	va_list n_list;
-
-	va_start(n_list, format);
 	const char *ptr;
+	va_list n_list;
 	int count = 0;
 	char *s_val;
 
+	va_start(n_list, format);
 	for (ptr = format; *ptr; ptr++)
 	{
 		if (*ptr != '%')
