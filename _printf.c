@@ -24,6 +24,10 @@ int _printf(const char *format, ...)
 		}
 		switch (*++ptr)
 		{
+			case 'i':
+			case 'd':
+				print_int(va_arg(n_list, int));
+				break;
 			case 's':
 				count += print_str(va_arg(n_list, char *));
 				break;
